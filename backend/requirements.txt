@@ -1,0 +1,6 @@
+fastapi
+fastapi-cors
+uvicorn
+opencv-python
+python-multipart
+mediapipe

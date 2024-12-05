@@ -1,15 +1,9 @@
-# Ambiente virtual
-venv/
-__pycache__/
-*.pyc
-*.pyo
-
-# Banco de dados local
-*.db
-
-# Logs
-*.log
-
-# Configurações específicas do IDE
-.idea/
-.vscode/
+node_modules/
+# Imagens
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.svg
