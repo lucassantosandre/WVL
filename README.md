@@ -18,7 +18,7 @@
 
 # 🏋️ Pose Analysis Project 📸
 
-Um **projeto inovador** para análise de poses de fisiculturismo utilizando **Python**, **Docker**, **Machine Learning** e **Inteligência Artificial**. O objetivo principal é analisar poses de fisiculturismo, identificar landmarks corporais, calcular ângulos e reconhecer poses com base nos critérios do **IFBB Pro**.
+Um **projeto focado no aprendizado e desenvolvimento de tecnologias** para análise de poses corporais. Utilizando **Python**, **Docker**, **Machine Learning** e **Inteligência Artificial**, o objetivo é detectar landmarks corporais, calcular ângulos e identificar poses clássicas, alinhando-se aos critérios estabelecidos pelo **IFBB Pro**.
 
 > ⚠️ **Nota:** Este projeto está em desenvolvimento contínuo e tem como foco o **aprendizado** de tecnologias como Python, Docker, Machine Learning e IA. Ainda há diversos pontos a melhorar, mas ele está sendo aprimorado regularmente!
 
@@ -46,9 +46,17 @@ Um **projeto inovador** para análise de poses de fisiculturismo utilizando **Py
 ## ⚙️ **Como Configurar o Projeto**
 
 ### **Pré-requisitos**
-1. **Instalar Docker e Docker Compose**:
+1. **Instalar Python 3.11**:
+   - [Baixar Python 3.11](https://www.python.org/downloads/release/python-3110/)
+
+2. **Instalar Docker e Docker Compose**:
    - [Docker](https://www.docker.com/)
    - [Docker Compose](https://docs.docker.com/compose/install/)
+
+3. **Instalar Make**:
+   - [Linux/MacOS: Já disponível na maioria das distribuições.](https://www.gnu.org/software/make/)
+   - [Windows: Baixar Make para Windows](http://gnuwin32.sourceforge.net/packages/make.htm)
+
 
 2. **Clone o repositório**:
    ```bash
@@ -74,21 +82,15 @@ O projeto utiliza um **Makefile** para simplificar os comandos com Docker. Aqui 
 ---
 
 ### **Passo a Passo para Uso**
-1. **Construa as imagens Docker**:
-   ```bash
-   make build
-   ```
-
-2. **Inicie os containers**:
+1. **Builda e Subir a aplicação**:
    ```bash
    make up
    ```
-
-3. **Acesse a aplicação**:
+2. **Acesse a aplicação**:
    - **Frontend:** [http://localhost:3000](http://localhost:3000)
    - **Backend:** [http://localhost:8000/docs](http://localhost:8000/docs)
 
-4. **Realize o upload de uma imagem de pose**:
+3. **Realize o upload de uma imagem de pose**:
    - Utilize o botão de upload no frontend.
    - Verifique os resultados no painel de resposta e visualize a imagem anotada.
 
@@ -118,15 +120,6 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou pull r
 
 ## 📄 **Licença**
 Este projeto é de código aberto e licenciado sob os termos da **MIT License**.
-
----
-
-## 🌟 **Imagens de Demonstração**
-### **Frontend**
-![Frontend Example](https://via.placeholder.com/800x400.png?text=Frontend+Example)
-
-### **Imagem Anotada**
-![Annotated Image](https://via.placeholder.com/800x400.png?text=Annotated+Image)
 
 ---
 
