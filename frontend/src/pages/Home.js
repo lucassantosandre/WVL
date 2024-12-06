@@ -5,12 +5,12 @@ function Home() {
   const [file, setFile] = useState(null);
   const [response, setResponse] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
-  // Define a URL da API com base no ambiente
   const API_URL =
     process.env.NODE_ENV === "development"
-      ? "http://localhost:8000" // Ambiente local (fora do Docker)
-      : "http://backend:8000"; // Ambiente Docker (usando o nome do serviço)
+      ? "http://localhost:8000"
+      : "http://backend:8000";
 
   const handleUpload = async () => {
     if (!file) {
@@ -23,13 +23,17 @@ function Home() {
 
     try {
       const res = await axios.post(`${API_URL}/analyze`, formData);
-      setResponse(JSON.stringify(res.data, null, 2)); // Formata a resposta JSON
-      setErrorMessage(""); // Limpa mensagens de erro
+      const data = res.data;
+
+      // Configura os estados com os dados retornados
+      if (data.image_url) {
+        setImageUrl(`${API_URL}${data.image_url}`);
+      }
+      setResponse(JSON.stringify(data, null, 2));
+      setErrorMessage("");
     } catch (error) {
-      console.error("Upload Error:", error); // Log do erro no console
-      setErrorMessage(
-        "Failed to upload the file. Please check your connection or try again."
-      );
+      console.error("Upload Error:", error);
+      setErrorMessage("Failed to upload the file. Please try again.");
     }
   };
 
@@ -58,6 +62,12 @@ function Home() {
       >
         Upload
       </button>
+      {imageUrl && (
+        <div>
+          <p>Annotated Image:</p>
+          <img src={imageUrl} alt="Annotated Pose" style={{ maxWidth: "100%" }} />
+        </div>
+      )}
       {response && (
         <div
           style={{

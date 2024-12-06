@@ -2,7 +2,7 @@ import mediapipe as mp
 import cv2
 import math
 from fastapi import UploadFile
-from fastapi.responses import FileResponse
+from fastapi.responses import JSONResponse
 import os
 
 # Inicializa MediaPipe Pose e Desenho
@@ -11,12 +11,6 @@ mp_drawing = mp.solutions.drawing_utils
 
 # Função para calcular ângulo entre três pontos
 def calculate_angle(a, b, c):
-    """
-    Calcula o ângulo entre três pontos:
-    a: Primeiro ponto (x, y, z)
-    b: Ponto central (x, y, z)
-    c: Terceiro ponto (x, y, z)
-    """
     ang = math.degrees(
         math.atan2(c[1] - b[1], c[0] - b[0]) -
         math.atan2(a[1] - b[1], a[0] - b[0])
@@ -37,9 +31,9 @@ async def analyze_pose(file: UploadFile):
     pose = mp_pose.Pose(static_image_mode=True)
     results = pose.process(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
 
-    # Feedback inicial
     feedback = "Pose analyzed successfully"
     angles = {}
+    annotated_image_path = None
 
     # Verifica se landmarks foram detectados
     if results.pose_landmarks:
@@ -58,7 +52,6 @@ async def analyze_pose(file: UploadFile):
             )
             angles["right_elbow"] = right_elbow_angle
 
-            # Feedback baseado no ângulo
             if right_elbow_angle < 80 or right_elbow_angle > 100:
                 feedback += " | Adjust your right elbow to approximately 90 degrees."
         except IndexError:
@@ -72,21 +65,23 @@ async def analyze_pose(file: UploadFile):
             mp_pose.POSE_CONNECTIONS
         )
 
-        # Salva a imagem anotada
-        output_path = f"annotated_{file.filename}"
-        cv2.imwrite(output_path, annotated_image)
+        # Salva a imagem anotada no diretório acessível
+        output_dir = "./annotated_images"
+        os.makedirs(output_dir, exist_ok=True)  # Cria o diretório, se necessário
+        annotated_image_path = f"{output_dir}/annotated_{file.filename}"
+        cv2.imwrite(annotated_image_path, annotated_image)
 
         # Limpa o arquivo temporário original
         os.remove(file_location)
 
-        # Retorna a imagem anotada junto com os ângulos calculados
-        return {
-            "image": FileResponse(output_path, media_type="image/jpeg", filename=f"annotated_{file.filename}"),
-            "angles": angles,
-            "message": feedback
-        }
+    else:
+        feedback = "No pose landmarks detected"
+        os.remove(file_location)  # Remove o arquivo original
 
-    # Caso nenhum landmark seja detectado
-    feedback = "No pose landmarks detected"
-    os.remove(file_location)  # Remove o arquivo original mesmo se falhar
-    return {"message": feedback, "angles": angles}
+    # Resposta JSON com a URL da imagem e ângulos calculados
+    response = {
+        "image_url": f"/annotated_images/annotated_{file.filename}" if annotated_image_path else None,
+        "angles": angles,
+        "message": feedback,
+    }
+    return JSONResponse(content=response)
